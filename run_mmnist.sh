@@ -1,9 +1,10 @@
-epochs=100
-learning_rate=0.001
-use_gpu=True
+#!/usr/bin/env bash
+#SBATCH --job-name=mmnist_tsmixer
+#SBATCH --output=runs/TSMIXER_MNINST_STUD%j.log
+#SBATCH --error=runs/TSMIXER_MNIST_STUD%j.err
+#SBATCH --mail-user=hussainin@uni-hildesheim.de
+#SBATCH --partition=STUD
+#SBATCH --gres=gpu:1
 
-
-python -u main.py \
-    --epochs $epochs \
-    --lr $learning_rate \
-    --device "cuda"> results/Debug/initial_mmnist_results.log
+srun python3 -u main.py \
+  --epochs 150
