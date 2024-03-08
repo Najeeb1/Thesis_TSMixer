@@ -7,10 +7,10 @@ warnings.filterwarnings('ignore')
 def create_parser():
     parser = argparse.ArgumentParser()
     # Set-up parameters
-    parser.add_argument('--device', default='cpu', type=str, help='Name of device to use for tensor computations (cuda/cpu)')
+    parser.add_argument('--device', default='cuda', type=str, help='Name of device to use for tensor computations (cuda/cpu)')
     parser.add_argument('--res_dir', default='./results', type=str)
     parser.add_argument('--ex_name', default='Debug', type=str)
-    parser.add_argument('--use_gpu', default=False, type=bool)
+    parser.add_argument('--use_gpu', default=True, type=bool)
     parser.add_argument('--gpu', default=0, type=int)
     parser.add_argument('--seed', default=1, type=int)
 
