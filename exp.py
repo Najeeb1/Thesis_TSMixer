@@ -75,8 +75,9 @@ class Exp:
         self.scheduler = torch.optim.lr_scheduler.OneCycleLR(
             self.optimizer, max_lr=self.args.lr, steps_per_epoch=len(self.train_loader), epochs=self.args.epochs)
         return self.optimizer
-
+        
     def _select_criterion(self):
+        # self.criterion = torch.nn.SmoothL1Loss()
         self.criterion = torch.nn.MSELoss()
 
     def _save(self, name=''):
@@ -103,6 +104,7 @@ class Exp:
                 loss = self.criterion(pred_y, batch_y)
                 train_loss.append(loss.item())
                 train_pbar.set_description('train loss: {:.4f}'.format(loss.item()))
+                # train_pbar.set_description('learning rate changes:{:.4f}'.format(eplr))
 
                 loss.backward()
                 self.optimizer.step()
@@ -113,10 +115,12 @@ class Exp:
             if epoch % args.log_step == 0:
                 with torch.no_grad():
                     vali_loss = self.vali(self.vali_loader)
+                    # eplr = self.optimizer.param_groups[0]["lr"]
+                    
                     if epoch % (args.log_step * 100) == 0:
                         self._save(name=str(epoch))
-                print_log("Epoch: {0} | Train Loss: {1:.4f} Vali Loss: {2:.4f}\n".format(
-                    epoch + 1, train_loss, vali_loss))
+                print_log("Epoch: {0} | Train Loss: {1:.4f} Vali Loss: {2:.4f} \ LR change: {3:.4f}\n".format(
+                    epoch + 1, train_loss, vali_loss, self.scheduler.get_last_lr()[0]))
                 recorder(vali_loss, self.model, self.path)
 
         best_model_path = self.path + '/' + 'checkpoint.pth'

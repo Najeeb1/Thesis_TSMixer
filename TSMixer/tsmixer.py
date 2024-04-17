@@ -1,12 +1,17 @@
 import torch
 import torch.nn as nn
-
+from .utils import RevIN
 class TSMixer(nn.Module):
  
     def __init__(self, enc_in, num_blocks,
                  hidden_size, seq_len, pred_len, 
                  individual, dropout, activation, 
-                 single_layer_mixer):
+                 single_layer_mixer, 
+                 revin = True, 
+                 affine = False, 
+                 subtract_last = False,
+                 verbose=False, 
+                 target_idx=-1):
         
         super(TSMixer, self).__init__()
         self.num_blocks = num_blocks
@@ -24,8 +29,20 @@ class TSMixer(nn.Module):
                 self.output_linear_layers.append(nn.Linear(self.channels, pred_len))
         else :
             self.output_linear_layers = nn.Linear(self.channels, pred_len)
+            
+        # Adding revIN 
+        self.revin = revin
+        if revin:
+            self.revin_layer = RevIN(num_features= seq_len, affine=affine, subtract_last=subtract_last, target_idx=target_idx)
+
 
     def forward(self, x):
+        
+        # instance norm
+        if self.revin:                                                        
+            x = self.revin_layer(x, 'norm')
+            # x = x.permute(0,2,1)                                                            # z: [bs x nvars × seq_len]
+            
         # x: [Batch, Input length, Channel]
         for _ in range(self.num_blocks):
             x = self.mixer_block(x)
@@ -41,7 +58,9 @@ class TSMixer(nn.Module):
         else :
             y = self.output_linear_layers(x.clone())
         
-
+        # denorm
+        if self.revin:                                                        
+            y = self.revin_layer(y, 'denorm')
         y = torch.swapaxes(y, 1, 2)
        
         return y
