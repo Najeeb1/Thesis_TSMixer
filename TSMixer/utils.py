@@ -33,7 +33,7 @@ class RevIN(torch.nn.Module):
         else:
             self.mean = torch.mean(x, dim=dim2reduce, keepdim=True).detach()
         self.stdev = torch.sqrt(torch.var(x, dim=dim2reduce, keepdim=True, unbiased=False) + self.eps).detach()
-        print(self.stdev.shape)
+  
 
     def _normalize(self, x):
         if self.subtract_last:
