@@ -154,37 +154,37 @@ def load_data(
 
 
 
-    # Get 1/100th of the dataset indices
-    subset_indices_train = list(range(len(train_set))[::100])
-    subset_indices_test = list(range(len(test_set))[::100])
+    # # Get 1/100th of the dataset indices
+    # subset_indices_train = list(range(len(train_set))[::100])
+    # subset_indices_test = list(range(len(test_set))[::100])
 
-    # Create subsets of the original datasets
-    subset_train_set = Subset(train_set, subset_indices_train)
-    subset_test_set = Subset(test_set, subset_indices_test)
+    # # Create subsets of the original datasets
+    # subset_train_set = Subset(train_set, subset_indices_train)
+    # subset_test_set = Subset(test_set, subset_indices_test)
 
-    # Create dataloaders for subsets
-    dataloader_train = DataLoader(
-        subset_train_set, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
-    dataloader_validation = DataLoader(
-        subset_test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
-    dataloader_test = DataLoader(
-        subset_test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
+    # # Create dataloaders for subsets
+    # dataloader_train = DataLoader(
+    #     subset_train_set, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+    # dataloader_validation = DataLoader(
+    #     subset_test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
+    # dataloader_test = DataLoader(
+    #     subset_test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
 
-    mean, std = 0, 1
+    # mean, std = 0, 1
 
-    return dataloader_train, dataloader_validation, dataloader_test, mean, std
+    # return dataloader_train, dataloader_validation, dataloader_test, mean, std
 
     # train_set = MovingMNIST(root=data_root, is_train=True,
     #                         n_frames_input=10, n_frames_output=10, num_objects=[2])
     # test_set = MovingMNIST(root=data_root, is_train=False,
     #                        n_frames_input=10, n_frames_output=10, num_objects=[2])
 
-    # dataloader_train = torch.utils.data.DataLoader(
-    #     train_set, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
-    # dataloader_validation = torch.utils.data.DataLoader(
-    #     test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
-    # dataloader_test = torch.utils.data.DataLoader(
-    #     test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
+    dataloader_train = torch.utils.data.DataLoader(
+        train_set, batch_size=batch_size, shuffle=True, pin_memory=True, num_workers=num_workers)
+    dataloader_validation = torch.utils.data.DataLoader(
+        test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
+    dataloader_test = torch.utils.data.DataLoader(
+        test_set, batch_size=val_batch_size, shuffle=False, pin_memory=True, num_workers=num_workers)
 
-    # mean, std = 0, 1
-    # return dataloader_train, dataloader_validation, dataloader_test, mean, std
+    mean, std = 0, 1
+    return dataloader_train, dataloader_validation, dataloader_test, mean, std
