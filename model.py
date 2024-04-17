@@ -48,7 +48,7 @@ class SimVP(nn.Module):
         T, C, H, W = shape_in
         self.enc = Encoder(C, hid_S, N_S)
         # self.hid = Mid_Xnet(T*hid_S, hid_T, N_T, incep_ker, groups)
-        self.mixer = TSMixer(T, 4, 5, hid_S, 10, True, 0.2, 'relu', False)
+        self.mixer = TSMixer(T, 4, 5, hid_S, 10, False, 0.2, 'relu', False)
 
         self.dec = Decoder(hid_S, C, N_S)
 
